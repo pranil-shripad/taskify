@@ -11,6 +11,21 @@ router.post("/notes/new", (req, res) => {
   const {
     body: { title, content, tags },
   } = req;
+
+  try {
+    const newNote = {
+      id: mockNotes.length + 1,
+      title,
+      content,
+      tags,
+    };
+    if (!newNote) throw new Error("Note creation failed");
+    mockNotes.push(newNote);
+    return res.status(200).send(mockNotes);
+  } catch (err) {
+    console.log(err);
+  }
+  
 });
 
 router.post("/notes/search", (req, res) => {
