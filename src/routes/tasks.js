@@ -7,13 +7,11 @@ import { getTasksById, getTaskByStatus } from "../handlers/tasks.js";
 import { mockTasks } from "../utils/constants.js";
 import {
   createTaskValidationSchema,
-  getTaskValidationSchema,
+  getTaskByStatusValidationSchema,
 } from "../utils/validationSchema.js";
 import {
-  query,
   validationResult,
   checkSchema,
-  matchedData,
 } from "express-validator";
 
 const router = Router();
@@ -22,17 +20,21 @@ router.get("/", (req, res) => {
   res.send("Welcome to taskify!");
 });
 
-router.get("/api/tasks", checkSchema(getTaskValidationSchema), (req, res) => {
-  const result = validationResult(req);
-  console.log(result);
-  const {
-    query: { status },
-  } = req;
-  if (status) {
-    return res.send(mockTasks.filter((task) => task.status === status));
+router.get(
+  "/api/tasks",
+  checkSchema(getTaskByStatusValidationSchema),
+  (req, res) => {
+    const result = validationResult(req);
+    console.log(result);
+    const {
+      query: { status },
+    } = req;
+    if (status) {
+      return res.send(mockTasks.filter((task) => task.status === status));
+    }
+    return res.send(mockTasks);
   }
-  return res.send(mockTasks);
-});
+);
 
 router.get("/api/tasks/:id", resolveIndexByTaskId, getTasksById);
 
@@ -52,6 +54,24 @@ router.post("/tasks", checkSchema(createTaskValidationSchema), (req, res) => {
 
   mockTasks.push(newTask);
   return res.status(201).json(newTask);
+});
+
+router.put("/tasks/:id", resolveIndexByTaskId, (req, res) => {
+  const { body, findTaskIndex } = req;
+  mockTasks[findTaskIndex] = { id: mockTasks[findTaskIndex].id, ...body };
+  return res.sendStatus(200);
+});
+
+router.patch("/tasks/:id", resolveIndexByTaskId, (req, res) => {
+  const { body, findTaskIndex } = req;
+  mockTasks[findTaskIndex] = { ...mockTasks[findTaskIndex], ...body };
+  return res.sendStatus(200);
+});
+
+router.delete("/tasks/:id", resolveIndexByTaskId, (req, res) => {
+  const { findTaskIndex } = req;
+  mockTasks.splice(findTaskIndex, 1);
+  return res.sendStatus(200);
 });
 
 export default router;

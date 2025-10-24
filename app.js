@@ -1,6 +1,7 @@
 import express from "express";
 import routes from "./src/routes/index.js";
 import tasksRouter from "./src/routes/tasks.js"
+import notesRouter from "./src/routes/notes.js"
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -13,6 +14,7 @@ const PORT = process.env.PORT || 3000;
 app.use(routes);
 
 app.use("/api", tasksRouter);
+app.use("/api", notesRouter);
 
 
 app.listen(PORT, () => {

@@ -7,9 +7,21 @@ export const createTaskValidationSchema = {
       errorMessage: "Task name should be a string!",
     },
   },
+  status: {
+    notEmpty: {
+      errorMessage: "The status of the task must not be empty"
+    },
+    isString:{
+      errorMessage: "The status should be a string"
+    },
+    isIn: {
+        options: [["pending", "completed"]],
+        errorMessage: "The task can either be pending or completed",
+    }
+  }
 };
 
-export const getTaskValidationSchema = {
+export const getTaskByStatusValidationSchema = {
     status: {
     notEmpty: {
       errorMessage: "The status of the task should be defined",
