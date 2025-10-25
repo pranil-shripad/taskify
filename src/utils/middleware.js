@@ -1,4 +1,4 @@
-import { mockTasks } from "./constants.js";
+import { mockNotes, mockTasks } from "./constants.js";
 
 export const resolveIndexByTaskId = (req, res, next) => {
   const {
@@ -16,10 +16,20 @@ export const resolveIndexByTaskStatus = (req, res, next) => {
   const {
     params: { status },
   } = req;
-  const findTaskStatus = mockTasks.find(
-    (task) => task.status === status
-  );
+  const findTaskStatus = mockTasks.find((task) => task.status === status);
   if (findTaskStatus === -1) return res.sendStatus(404);
   req.findTaskStatus = findTaskStatus;
+  next();
+};
+
+export const resolveIndexByNotesId = (req, res, next) => {
+  const {
+    params: { id },
+  } = req;
+  const parsedNoteId = parseInt(id);
+  if (isNaN(parsedNoteId)) return res.sendStatus(400);
+  const findNoteIndex = mockNotes.findIndex((note) => note.id === parsedNoteId);
+  if (findNoteIndex === -1) return res.sendStatus(404);
+  req.findNoteIndex = findNoteIndex;
   next();
 };

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { mockNotes } from "../utils/constants.js";
+import { resolveIndexByNotesId } from "../utils/middleware.js";
 
 const router = Router();
 
@@ -25,7 +26,6 @@ router.post("/notes/new", (req, res) => {
   } catch (err) {
     console.log(err);
   }
-  
 });
 
 router.post("/notes/search", (req, res) => {
@@ -42,6 +42,18 @@ router.post("/notes/search", (req, res) => {
     );
   });
   return res.status(200).send(result);
+});
+
+router.patch("/notes/:id", resolveIndexByNotesId, (req, res) => {
+  const { findNoteIndex, body } = req;
+  mockNotes[findNoteIndex] = { ...mockNotes[findNoteIndex], ...body };
+  return res.sendStatus(200);
+});
+
+router.delete("/notes/:id", resolveIndexByNotesId, (req, res) => {
+  const { findNoteIndex } = req;
+  mockNotes.splice(findNoteIndex, 1);
+  return res.sendStatus(200);
 });
 
 export default router;
