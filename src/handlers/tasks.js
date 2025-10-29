@@ -1,15 +1,12 @@
 import { mockTasks } from "../utils/constants.js";
+import { Task } from "../mongoose/schemas/tasksSchema.js";
 
-export const getTasksById = (req, res) => {
-  const { findTaskIndex } = req;
-  const findTask = mockTasks[findTaskIndex];
-  if (!findTask) return res.sendStatus(404);
-  return res.send(findTask);
+export const getTasksById = async (req, res) => {
+  const { task } = req;
+  return res.send(task);
 };
 
-export const getTaskByStatus = (req, res) => {
-    const { findTaskStatus } = req;
-    const findStatus = mockTasks[findTaskStatus];
-    if(!findStatus) return res.sendStatus(404);
-    return res.send(findStatus);
-}
+export const getTaskByStatus = async (req, res) => {
+  const { findTaskStatus } = req;
+  return res.send(findTaskStatus);
+};

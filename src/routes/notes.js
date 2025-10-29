@@ -2,6 +2,7 @@ import { Router } from "express";
 import { mockNotes } from "../utils/constants.js";
 import { resolveIndexByNotesId } from "../utils/middleware.js";
 
+
 const router = Router();
 
 router.get("/notes", (req, res) => {

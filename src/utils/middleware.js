@@ -1,25 +1,42 @@
 import { mockNotes, mockTasks } from "./constants.js";
+import { Task } from "../mongoose/schemas/tasksSchema.js";
 
-export const resolveIndexByTaskId = (req, res, next) => {
+export const resolveIndexByTaskId = async (req, res, next) => {
   const {
-    params: { id },
+    params: { taskId },
   } = req;
-  const parsedTaskId = parseInt(id);
+  const parsedTaskId = parseInt(taskId);
   if (isNaN(parsedTaskId)) return res.sendStatus(400);
-  const findTaskIndex = mockTasks.findIndex((task) => task.id === parsedTaskId);
-  if (findTaskIndex === -1) return res.sendStatus(404);
-  req.findTaskIndex = findTaskIndex;
+  const task = await Task.findOne({ taskId: parsedTaskId });
+  if (!task) return res.sendStatus(404);
+  req.task = task;
   next();
 };
 
-export const resolveIndexByTaskStatus = (req, res, next) => {
-  const {
-    params: { status },
-  } = req;
-  const findTaskStatus = mockTasks.find((task) => task.status === status);
-  if (findTaskStatus === -1) return res.sendStatus(404);
-  req.findTaskStatus = findTaskStatus;
-  next();
+export const resolveIndexByTaskStatus = async (req, res, next) => {
+  try {
+    const {
+      query: { status },
+    } = req;
+
+    const filter = status ? { status } : {};
+
+    console.log("🔍 Status from query:", status);
+    console.log("🧮 Filter being used:", filter);
+
+    const findTaskStatus = await Task.find(filter);
+    console.log("📦 Found tasks:", findTaskStatus);
+
+    if (!findTaskStatus || findTaskStatus.length === 0) {
+      return res
+        .status(404)
+        .json({ message: `No tasks found with status: ${status}` });
+    }
+    req.findTaskStatus = findTaskStatus;
+    next();
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const resolveIndexByNotesId = (req, res, next) => {

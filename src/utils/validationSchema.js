@@ -1,4 +1,10 @@
 export const createTaskValidationSchema = {
+  taskId: {
+    isNumber: {
+      errorMessage: "Task Id must be a number",
+    },
+  },
+
   taskName: {
     notEmpty: {
       errorMessage: "The task Name must not be empty!",
@@ -6,23 +12,26 @@ export const createTaskValidationSchema = {
     isString: {
       errorMessage: "Task name should be a string!",
     },
+    isUnique: {
+      errorMessage: "Task Id cannot be duplicate!",
+    },
   },
   status: {
     notEmpty: {
-      errorMessage: "The status of the task must not be empty"
+      errorMessage: "The status of the task must not be empty",
     },
-    isString:{
-      errorMessage: "The status should be a string"
+    isString: {
+      errorMessage: "The status should be a string",
     },
     isIn: {
-        options: [["pending", "completed"]],
-        errorMessage: "The task can either be pending or completed",
-    }
-  }
+      options: [["pending", "completed"]],
+      errorMessage: "The task can either be pending or completed",
+    },
+  },
 };
 
 export const getTaskByStatusValidationSchema = {
-    status: {
+  status: {
     notEmpty: {
       errorMessage: "The status of the task should be defined",
     },
@@ -31,9 +40,8 @@ export const getTaskByStatusValidationSchema = {
       errorMessage: "Filter must be 3-10 characters long",
     },
     isIn: {
-        options: [["pending", "completed"]],
-        errorMessage: "The task can either be pending or completed",
-    }
+      options: [["pending", "completed"]],
+      errorMessage: "The task can either be pending or completed",
+    },
   },
-}
-
+};
