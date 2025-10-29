@@ -2,6 +2,7 @@ import express from "express";
 import routes from "./src/routes/index.js";
 import tasksRouter from "./src/routes/tasks.js";
 import notesRouter from "./src/routes/notes.js";
+import userRouter from "./src/routes/users.js";
 import mongoose from "mongoose";
 
 mongoose
@@ -20,6 +21,8 @@ app.use(routes);
 
 app.use("/api", tasksRouter);
 app.use("/api", notesRouter);
+app.use("/api", userRouter);
+
 
 app.listen(PORT, () => {
   console.log(`Listening at port ${PORT}`);

@@ -1,14 +1,10 @@
-import { json, Router } from "express";
+import { Router } from "express";
 import {
   resolveIndexByTaskId,
   resolveIndexByTaskStatus,
 } from "../utils/middleware.js";
-import { getTasksById, getTaskByStatus } from "../handlers/tasks.js";
 import { mockTasks } from "../utils/constants.js";
-import {
-  createTaskValidationSchema,
-  getTaskByStatusValidationSchema,
-} from "../utils/validationSchema.js";
+import { createTaskValidationSchema } from "../utils/validationSchema.js";
 import { validationResult, checkSchema, matchedData } from "express-validator";
 import { Task } from "../mongoose/schemas/tasksSchema.js";
 
